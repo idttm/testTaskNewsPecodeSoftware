@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="218" id="KGk-i7-Jjw" customClass="TableViewCell" customModule="testTaskNewsPecodeSoftware" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="483" height="218"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="483" height="218"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newspaper.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="UyA-ML-6RI">
+                        <rect key="frame" x="311" y="5" width="167" height="163"/>
+                    </imageView>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="mcn-3c-1A2">
+                        <rect key="frame" x="5" y="5" width="301" height="208"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Covid Now Infecting Mostly Younger People In Los Angeles; 83% Of New Cases Under 50 Years Old - Deadline" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k0p-TY-mZe">
+                                <rect key="frame" x="0.0" y="0.0" width="301" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="WrH-gN-rd0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&quot;Los Angeles County’s alarming spike in Covid cases continued on Saturday, with a secon" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dou-tt-sYa">
+                                <rect key="frame" x="0.0" y="55" width="301" height="122.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="CDK-2n-4l5">
+                                <rect key="frame" x="0.0" y="193.5" width="301" height="14.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="author" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sg3-32-zTt">
+                                        <rect key="frame" x="0.0" y="0.0" width="145.5" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sourse" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Op3-gq-uRU">
+                                        <rect key="frame" x="155.5" y="0.0" width="145.5" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="sg3-32-zTt" firstAttribute="width" secondItem="Op3-gq-uRU" secondAttribute="width" id="vJr-1T-BDS"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="CDK-2n-4l5" firstAttribute="top" relation="greaterThanOrEqual" secondItem="dou-tt-sYa" secondAttribute="bottom" constant="5" id="pfC-n0-bgZ"/>
+                            <constraint firstItem="dou-tt-sYa" firstAttribute="top" secondItem="k0p-TY-mZe" secondAttribute="bottom" constant="5" id="zlC-Dc-5ji"/>
+                        </constraints>
+                    </stackView>
+                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nns-AN-A0b">
+                        <rect key="frame" x="316" y="173" width="162" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="OiM-XI-NQs"/>
+                        </constraints>
+                        <state key="normal">
+                            <imageReference key="image" image="star.circle" catalog="system" symbolScale="default"/>
+                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                        </state>
+                        <state key="selected">
+                            <imageReference key="image" image="star.circle" catalog="system" symbolScale="large"/>
+                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                        </state>
+                        <state key="highlighted">
+                            <imageReference key="image" image="star.circle" catalog="system" symbolScale="large"/>
+                        </state>
+                        <connections>
+                            <action selector="favoriteButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ihx-Nw-fEo"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="nns-AN-A0b" firstAttribute="top" secondItem="UyA-ML-6RI" secondAttribute="bottom" constant="5" id="27b-z1-aYN"/>
+                    <constraint firstItem="UyA-ML-6RI" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="FWc-h4-Ivt"/>
+                    <constraint firstItem="nns-AN-A0b" firstAttribute="leading" secondItem="mcn-3c-1A2" secondAttribute="trailing" constant="10" id="L3J-iC-FN6"/>
+                    <constraint firstAttribute="bottom" secondItem="mcn-3c-1A2" secondAttribute="bottom" constant="5" id="NJb-pI-O4e"/>
+                    <constraint firstAttribute="trailing" secondItem="nns-AN-A0b" secondAttribute="trailing" constant="5" id="TL8-fQ-0Jx"/>
+                    <constraint firstItem="UyA-ML-6RI" firstAttribute="leading" secondItem="mcn-3c-1A2" secondAttribute="trailing" constant="5" id="XKv-yX-6QD"/>
+                    <constraint firstAttribute="trailing" secondItem="UyA-ML-6RI" secondAttribute="trailing" constant="5" id="gbu-KG-pgX"/>
+                    <constraint firstItem="mcn-3c-1A2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="iFV-OE-GTZ"/>
+                    <constraint firstItem="UyA-ML-6RI" firstAttribute="height" secondItem="mcn-3c-1A2" secondAttribute="height" multiplier="0.783654" id="msm-1G-hB1"/>
+                    <constraint firstAttribute="bottom" secondItem="mcn-3c-1A2" secondAttribute="bottom" constant="5" id="shG-8f-bbE"/>
+                    <constraint firstItem="mcn-3c-1A2" firstAttribute="width" secondItem="UyA-ML-6RI" secondAttribute="width" multiplier="1.8" id="tc0-aX-fLd"/>
+                    <constraint firstAttribute="bottom" secondItem="nns-AN-A0b" secondAttribute="bottom" constant="5" id="v0u-Vf-Rxk"/>
+                    <constraint firstItem="mcn-3c-1A2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="zUs-7Z-npg"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="authorLabel" destination="sg3-32-zTt" id="vu6-ZH-QOJ"/>
+                <outlet property="descriptionLabel" destination="dou-tt-sYa" id="hUw-YB-piB"/>
+                <outlet property="favoriteButtonOutlet" destination="nns-AN-A0b" id="OFb-9e-XaC"/>
+                <outlet property="imageViewNews" destination="UyA-ML-6RI" id="76H-0R-3FA"/>
+                <outlet property="sourseLabel" destination="Op3-gq-uRU" id="Ea5-pp-b0X"/>
+                <outlet property="titleLabel" destination="k0p-TY-mZe" id="GfU-Lq-jzO"/>
+            </connections>
+            <point key="canvasLocation" x="94.927536231884062" y="147.99107142857142"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="newspaper.fill" catalog="system" width="128" height="111"/>
+        <image name="star.circle" catalog="system" width="128" height="121"/>
+    </resources>
+</document>
