@@ -2,16 +2,17 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="EFB-3H-hGl">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--News View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="testTaskNewsPecodeSoftware" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="NewsViewController" customModule="testTaskNewsPecodeSoftware" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -73,12 +74,25 @@
                                     </textField>
                                 </subviews>
                             </stackView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="C2f-UM-zkG">
+                                <rect key="frame" x="20" y="42" width="374" height="32"/>
+                                <segments>
+                                    <segment title="First"/>
+                                    <segment title="Second"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentedControlAction:" destination="6cY-3X-Aqx" eventType="valueChanged" id="SwE-FR-wIg"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Iv9-6Z-560"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="PaC-la-fdd" firstAttribute="leading" secondItem="Iv9-6Z-560" secondAttribute="leading" constant="40" id="9KH-eE-rJ0"/>
+                            <constraint firstItem="C2f-UM-zkG" firstAttribute="leading" secondItem="Iv9-6Z-560" secondAttribute="leading" constant="20" id="NDD-k1-U4o"/>
+                            <constraint firstItem="C2f-UM-zkG" firstAttribute="top" secondItem="Iv9-6Z-560" secondAttribute="top" constant="42" id="Quj-gB-YL8"/>
                             <constraint firstItem="PaC-la-fdd" firstAttribute="top" secondItem="Iv9-6Z-560" secondAttribute="top" constant="100" id="bRz-mL-Gp4"/>
+                            <constraint firstItem="Iv9-6Z-560" firstAttribute="trailing" secondItem="C2f-UM-zkG" secondAttribute="trailing" constant="20" id="ivN-ZC-F1U"/>
                             <constraint firstItem="Iv9-6Z-560" firstAttribute="trailing" secondItem="PaC-la-fdd" secondAttribute="trailing" constant="40" id="spI-St-48N"/>
                         </constraints>
                     </view>
@@ -86,6 +100,7 @@
                         <outlet property="CategoryTF" destination="Z66-GI-yoq" id="I4j-mQ-sHq"/>
                         <outlet property="CountryTF" destination="vIJ-VA-2cU" id="GPd-40-5xM"/>
                         <outlet property="SourseTF" destination="n3V-TL-bp8" id="1Gx-Pi-0BW"/>
+                        <outlet property="segmentedControl" destination="C2f-UM-zkG" id="dmV-2D-rgk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wUD-8A-yM6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

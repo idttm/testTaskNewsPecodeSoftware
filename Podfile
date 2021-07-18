@@ -6,6 +6,8 @@ target 'testTaskNewsPecodeSoftware' do
   use_frameworks!
 
   # Pods for testTaskNewsPecodeSoftware
-  pod 'Kingfisher', '~> 6.0'
+  
+pod 'RealmSwift'
+pod 'SDWebImage', '~> 5.0'
 
 end

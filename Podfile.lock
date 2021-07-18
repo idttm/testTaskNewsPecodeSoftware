@@ -1,16 +1,28 @@
 PODS:
-  - Kingfisher (6.3.0)
+  - Realm (10.7.6):
+    - Realm/Headers (= 10.7.6)
+  - Realm/Headers (10.7.6)
+  - RealmSwift (10.7.6):
+    - Realm (= 10.7.6)
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
 
 DEPENDENCIES:
-  - Kingfisher (~> 6.0)
+  - RealmSwift
+  - SDWebImage (~> 5.0)
 
 SPEC REPOS:
   trunk:
-    - Kingfisher
+    - Realm
+    - RealmSwift
+    - SDWebImage
 
 SPEC CHECKSUMS:
-  Kingfisher: 6c3df386db71d82c0817a429d2c9421a77396529
+  Realm: ed860452717c8db8f4bf832b6807f7f2ce708839
+  RealmSwift: e31c4ddbcc42ac879313d656b86f9ca539f6f4f4
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
-PODFILE CHECKSUM: ffcbcf6f7954f531275ced8ff09f34bc8ec19327
+PODFILE CHECKSUM: 2f0350fb5e1bd33c8a865ecc810d58c3e9cea660
 
 COCOAPODS: 1.10.1

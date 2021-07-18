@@ -5,28 +5,29 @@
 //  Created by Andrew Cheberyako on 11.07.2021.
 //
 
-import Foundation
-import Kingfisher
 
-class Model {
+import UIKit
+import SDWebImage
+
+class NewsModelView {
     
     private let networkManager = NetworkingManager()
    
     var data: [Articles] = []
-    var dataCategory: [ArticleCategory] = []
     var test: News?
     var numberOfRows: Int { data.count }
     private var page = 1
     
     
-    func getDataCountry(country: String, completio: @escaping() -> Void) {
-        
-        self.networkManager.getCountry(page: page, country: country) { [weak self] result in
+    func getDataCountry(country: String, refresh: Bool = false, category: String, completio: @escaping() -> Void) {
+        if refresh == true {
+            data.removeAll()
+            page = 1
+        }
+        self.networkManager.getCountry(page: page, country: country, category: category) { [weak self] result in
             switch result {
             case .success(let data):
                 self?.data.append(contentsOf: data)
-                print("seccsee")
-//
             case .failure(let error):
                 break
             }
@@ -35,26 +36,11 @@ class Model {
         }
         
     }
-    
     
     func pagePlus() {
         page += 1
     }
-    func getDataCategory(category: String, completio: @escaping() -> Void) {
-        
-        self.networkManager.getCategory(page: page, category: category) { [weak self] result in
-            switch result {
-            case .success(let data):
-                self?.data.append(contentsOf: data)
-                print("seccsee")
-            case .failure(let error):
-                break
-            }
-            self?.pagePlus()
-            completio()
-        }
-        
-    }
+    
     func getDataSources(sources: String, completio: @escaping() -> Void) {
         
         self.networkManager.getSources(page: page, sources: sources) { [weak self] result in
@@ -70,15 +56,13 @@ class Model {
         }
         
     }
-    
 
-    
 }
 extension UIImageView {
     func setImage(url: String) {
         
         guard let url = URL(string: url) else { return }
-        kf.setImage(with: url)
+        sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder.png"))
         
     }
 }

@@ -31,9 +31,9 @@ enum HTTPTask {
 
 enum NewsEndPoint: EndPointType {
     
-    case topHeadlines(country: String, apiKey: String, page: Int)
-    case category(category: String, apiKey: String, page: Int)
-    case sources(apyKey: String, page: Int, sources: String)
+    case countryAndCategory(country: String, category: String, apiKey: String, page: Int)
+    case searchSources(apiKey: String, page: Int, sources: String)
+    case allSources(apiKey: String)
 }
 
 extension NewsEndPoint {
@@ -49,12 +49,12 @@ extension NewsEndPoint {
     
     var path: String {
         switch self {
-        case .topHeadlines(_, _, _):
+        case .countryAndCategory(_, _, _, _):
             return "top-headlines"
-        case .category(_, _, _):
+        case .searchSources(_, _, _):
             return "top-headlines"
-        case .sources(_, _, _):
-            return "top-headlines"
+        case .allSources(_):
+            return "top-headlines/sources"
         }
     }
     
@@ -64,20 +64,18 @@ extension NewsEndPoint {
     
     var task: HTTPTask {
         switch self {
-        case .topHeadlines( country: let country, apiKey: let apiKey, page: let page):
+        case .countryAndCategory( country: let country, category: let category, apiKey: let apiKey, page: let page):
             return .requestParameters(urlParametrs: ["country": country,
+                                                     "category": category,
                                                      "apiKey": apiKey,
                                                      "page": page,
                                                      ])
-        case .category(category: let category, apiKey: let apiKey, page: let page):
-            return .requestParameters(urlParametrs: ["category": category,
-                                                     "apiKey": apiKey,
-                                                     "page": page])
-        case .sources(apyKey: let apiKey , page: let page, sources: let sources):
+        case .searchSources(apiKey: let apiKey , page: let page, sources: let sources):
             return .requestParameters(urlParametrs: [ "apiKey": apiKey,
                                                       "page": page,
                                                       "sources": sources])
-       
+        case .allSources(apiKey: let apiKey):
+            return .requestParameters(urlParametrs: ["apiKey": apiKey])
         }
     }
 }
@@ -147,8 +145,8 @@ class NetworkingManager {
     }
     let apiKey = "5d47805079624a8c9b7bd7843c9e906c"
     
-    func getCountry(page: Int, country: String, completion: @escaping (Result<[Articles],Error>) -> Void) {
-        let route = NewsEndPoint.topHeadlines(country: country, apiKey: apiKey, page: page)
+    func getCountry(page: Int, country: String, category: String, completion: @escaping (Result<[Articles],Error>) -> Void) {
+        let route = NewsEndPoint.countryAndCategory(country: country, category: category, apiKey: apiKey, page: page)
         
         self.fetchData(route, model: News.self) { [weak self] result in
             switch result {
@@ -156,7 +154,7 @@ class NetworkingManager {
                 guard let totalPage = model.totalResults else { return }
                 if page <= totalPage {
                     completion(.success(model.articles!))
-                    print(model.totalResults)
+                   
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -164,37 +162,37 @@ class NetworkingManager {
             }
         }
     }
-    func getCategory(page: Int, category: String, completion: @escaping (Result<[Articles],Error>) -> Void) {
-        let route = NewsEndPoint.category(category: category, apiKey: apiKey, page: page)
-        
-        self.fetchData(route, model: News.self) { [weak self] result in
-            switch result {
-            case .success(let model):
-                if page <= model.totalResults! {
-                    completion(.success(model.articles!))
-                    print(model.totalResults)
-                }
-            case .failure(let error):
-                completion(.failure(error))
-                return
-            }
-        }
-    }
+    
     func getSources(page: Int, sources: String, completion: @escaping (Result<[Articles],Error>) -> Void) {
-        let route = NewsEndPoint.sources(apyKey: apiKey, page: page, sources: sources)
+        let route = NewsEndPoint.searchSources(apiKey: apiKey, page: page, sources: sources)
         
         self.fetchData(route, model: News.self) { [weak self] result in
             switch result {
             case .success(let model):
                 if page <= model.totalResults! {
                     completion(.success(model.articles!))
-                    print(model.totalResults)
                 }
             case .failure(let error):
                 completion(.failure(error))
                 return
             }
         }
+    }
+    
+    func getAllSourse(completion: @escaping (Result<[InfoSource],Error>) -> Void) {
+    
+        let route = NewsEndPoint.allSources(apiKey: apiKey)
+        
+        self.fetchData(route, model: AllSourse.self) { [weak self] result  in
+            switch result {
+            case .success(let model):
+                completion(.success(model.sources))
+            case .failure(let error):
+                completion(.failure(error))
+                return
+            }
+        }
+        
     }
     
  

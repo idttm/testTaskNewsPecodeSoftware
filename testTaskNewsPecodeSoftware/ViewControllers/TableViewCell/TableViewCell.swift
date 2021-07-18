@@ -13,7 +13,7 @@ protocol CustomCellDelegate: class {
 
 class TableViewCell: UITableViewCell {
 
-   
+   var model = NewsModelView()
     @IBOutlet weak var imageViewNews: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -35,11 +35,13 @@ class TableViewCell: UITableViewCell {
         
     }
     
+  
+    
     @IBAction func favoriteButton(_ sender: UIButton) {
         
+       
         self.delegate?.customCell(self, didPressButton: sender)
-        sender.isSelected.toggle()
-        print("sender.isSelected \(sender.isSelected)")
+        
     }
     
     
