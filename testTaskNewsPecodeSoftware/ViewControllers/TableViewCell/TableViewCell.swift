@@ -30,17 +30,13 @@ class TableViewCell: UITableViewCell {
         contentView.backgroundColor = .mainWhite()
         imageViewNews.layer.cornerRadius = 10
         imageViewNews.clipsToBounds = true
-        
-        
     }
     
     @IBAction func favoriteButton(_ sender: UIButton) {
         
-       
         self.delegate?.customCell(self, didPressButton: sender)
         
     }
-    
     
     static var nib: UINib {
            return UINib(nibName: String(describing: self), bundle: nil)
@@ -48,8 +44,5 @@ class TableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-      
     }
-    
 }

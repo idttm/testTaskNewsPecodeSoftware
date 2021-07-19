@@ -16,5 +16,9 @@ class NewsObject: Object {
     @objc dynamic var author: String = ""
     @objc dynamic var sourse: String = ""
     @objc dynamic var url: String = ""
+
+    override static func primaryKey() -> String? {
+        return "url"
+    }
     
 }

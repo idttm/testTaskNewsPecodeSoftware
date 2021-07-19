@@ -9,67 +9,39 @@ import UIKit
 import SDWebImage
 import RealmSwift
 
-class Items {
-    
-    var selected: Bool
-    
-    init(selected: Bool) {
-        self.selected = selected
-    }
-    
-}
-
 class NewsViewController: UIViewController {
-    
+    @IBOutlet weak var tableView: UITableView!
     let viewModel = NewsViewModel()
-    let fileterModel = FilterViewModel()
-    var selectData: Articles!
-    var selectedButton: [Items] = []
     let refreshControl = UIRefreshControl()
 
-    let realm = try! Realm()
-    var items: Results<NewsObject>!
-    
-    var delegate: FilterVCDelegate? = nil
-    
-    
-    @IBOutlet weak var tableView: UITableView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tableView)
-        tableView.dataSource = self
-        tableView.delegate = self
+        setupTableView()
         viewModel.onDataUpdated = { [weak self] in
             self?.tableView.reloadData()
+            self?.refreshControl.endRefreshing()
         }
+        viewModel.refresh()
+    }
+
+    private func setupTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(TableViewCell.nib, forCellReuseIdentifier: TableViewCell.identifier)
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
-     
-        viewModel.getDataForCountry(country: "us", sources: nil, category: "technology") {
-            self.tableView.reloadData()
-        }
-        
     }
+
     @objc func refresh(_ sender: AnyObject) {
-        
-        viewModel.refresh {
-            self.tableView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
-        
-   
+        viewModel.refresh()
     }
     
     @IBAction func filterButton(_ sender: UIBarButtonItem) {
-        
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "filter") as? FilterViewController {
-            vc.delegate = self
-            present(vc, animated: true, completion: nil)
-        }
-        
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "filter") as? FilterViewController else { return }
+        vc.delegate = self
+        vc.viewModel.filter = viewModel.filter
+        present(vc, animated: true, completion: nil)
     }
 }
 
@@ -82,80 +54,51 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath
         ) as! TableViewCell
-        selectedButton.append(Items.init(selected: cell.favoriteButtonOutlet.isSelected))
         cell.selectionStyle = .gray
-        cell.titleLabel.text = viewModel.data[indexPath.row].title
-        cell.descriptionLabel.text = viewModel.data[indexPath.row].description
-        cell.sourseLabel.text = viewModel.data[indexPath.row].source?.name
-        cell.authorLabel.text = viewModel.data[indexPath.row].author
-        cell.favoriteButtonOutlet.isSelected = selectedButton[indexPath.row].selected
-        
-        if viewModel.data[indexPath.row].urlToImage != nil {
+        let wrappedItem = viewModel.data[indexPath.row]
+        cell.titleLabel.text = wrappedItem.item.title
+        cell.descriptionLabel.text = wrappedItem.item.description
+        cell.sourseLabel.text = wrappedItem.item.source?.name
+        cell.authorLabel.text = wrappedItem.item.author
+        cell.favoriteButtonOutlet.isSelected = wrappedItem.isSelected
+        if let url = wrappedItem.item.urlToImage {
             cell.imageViewNews.sd_imageIndicator = SDWebImageActivityIndicator.gray
-            cell.imageViewNews?.setImage(url: viewModel.data[indexPath.row].urlToImage!)
+            cell.imageViewNews?.setImage(url: url)
         }
-       
         cell.delegate = self
-        
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if  indexPath.row == viewModel.numberOfRows - 1 {
+        if indexPath.row == viewModel.numberOfRows - 1 {
             viewModel.getNextPage()
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        selectData = viewModel.data[indexPath.row]
+        viewModel.selectedItem = viewModel.data[indexPath.row].item
         performSegue(withIdentifier: "segue", sender: nil)
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         guard segue.identifier == "segue" else { return }
-        guard let moreVC = segue.destination as? WebViewController else {return}
-        moreVC.stringURL = selectData.url
-
+        guard let moreVC = segue.destination as? WebViewController,
+              let selectedItem = viewModel.selectedItem else { return }
+        moreVC.stringURL = selectedItem.url
     }
-      
 }
 
 extension NewsViewController: CustomCellDelegate {
     func customCell(_ cell: TableViewCell, didPressButton: UIButton) {
-
-
-        let indexPath = tableView.indexPath(for: cell)
-        
-        let new = viewModel.data[indexPath!.row]
-        selectedButton[indexPath!.row].selected.toggle()
-        let object = NewsObject()
-        object.title = viewModel.data[indexPath!.row].title!
-        object.descriptionNew = viewModel.data[indexPath!.row].description!
-        object.author = viewModel.data[indexPath!.row].author!
-        object.sourse = (viewModel.data[indexPath!.row].source?.name)!
-        object.image = viewModel.data[indexPath!.row].urlToImage!
-        object.url = viewModel.data[indexPath!.row].url!
-        do {
-            try realm.write({
-                realm.add(object)
-            })
-        } catch let error {
-            error.localizedDescription
-        }
-        tableView.reloadData()
-      
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        viewModel.toggleFavoriteStateForItem(at: indexPath)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
+
 extension NewsViewController: FilterVCDelegate {
     func didSelect(filter: Filter) {
-        viewModel.getDataForCountry(country: filter.countryCode, refresh: true, sources: filter.sourceId, category: filter.category) {
-            self.tableView.reloadData()
-        }
+        viewModel.filter = filter
     }
 }
-
-

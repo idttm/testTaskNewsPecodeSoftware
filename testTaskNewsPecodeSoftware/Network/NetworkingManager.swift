@@ -1,5 +1,9 @@
 import Foundation
 
+//    let apiKey = "5d47805079624a8c9b7bd7843c9e906c"
+//    let apiKey = "b04ea92468c94c0498c9bb8d5d26eefa"
+    let apiKey = "7c16a3ff91cf48fd8a28cd37030f0045"
+
 enum NetworkError: Error {
     case somothingWentWrong
     case noData
@@ -31,7 +35,6 @@ enum HTTPTask {
 enum NewsEndPoint: EndPointType {
     
     case countryAndCategory(country: String?, category: String?, sources: String?,  apiKey: String, page: Int)
-//    case searchSources(apiKey: String, page: Int, sources: String)
     case allSources(apiKey: String)
 }
 
@@ -109,7 +112,6 @@ class NetworkingManager {
                         urlComponts.queryItems?.append(queryItem)
                     }
                     request.url = urlComponts.url
-                    print(request.url)
                 }
                 if request.value(forHTTPHeaderField: "Content-Type") == nil {
                     
@@ -136,7 +138,6 @@ class NetworkingManager {
                 do {
                     let test = try self.parseJSON(type: model.self, data: data)
                     completion(.success(test))
-                    print("успех")
                 } catch let error {
                     completion(.failure(error))
                 }
@@ -145,27 +146,20 @@ class NetworkingManager {
         task.resume()
         return task
     }
-//    let apiKey = "5d47805079624a8c9b7bd7843c9e906c"
-    let apiKey = "b04ea92468c94c0498c9bb8d5d26eefa"
-    
-    func getCountry(page: Int, country: String?, category: String?, sources: String?, completion: @escaping (Result<[Articles],Error>) -> Void) {
+
+    func getCountry(page: Int, country: String?, category: String?, sources: String?, completion: @escaping (Result<[Article],Error>) -> Void) {
         let route = NewsEndPoint.countryAndCategory(country: country, category: category, sources: sources, apiKey: apiKey, page: page)
         
-        self.fetchData(route, model: News.self) { [weak self] result in
+        self.fetchData(route, model: News.self) { result in
             switch result {
             case .success(let model):
-                guard let totalPage = model.totalResults else { return }
-                if page <= totalPage {
-                    completion(.success(model.articles!))
-                   
-                }
+                completion(.success(model.articles))
             case .failure(let error):
                 completion(.failure(error))
                 return
             }
         }
     }
-    
     
     func getAllSources(completion: @escaping (Result<[InfoSource],Error>) -> Void) {
     
@@ -183,10 +177,8 @@ class NetworkingManager {
         
     }
     
- 
     func parseJSON<T:Decodable>(type: T.Type, data: Data) throws -> T {
         let decoder = JSONDecoder()
-//        print(String(data: data, encoding: .utf8))
         return try decoder.decode(type, from: data)
     }
     

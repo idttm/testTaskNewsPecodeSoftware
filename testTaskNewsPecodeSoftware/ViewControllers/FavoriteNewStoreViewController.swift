@@ -10,8 +10,6 @@ import RealmSwift
 import SDWebImage
 
 class FavoriteNewStoreViewController: UIViewController {
-   
-
     @IBOutlet weak var tableView: UITableView!
     
     let viewModel = FavoriteNewsModel()
@@ -22,7 +20,6 @@ class FavoriteNewStoreViewController: UIViewController {
         viewModel.items = viewModel.realm.objects(NewsObject.self)
         tableView.dataSource = self
         tableView.delegate = self
-        
         tableView.register(TableViewCell.nib, forCellReuseIdentifier: TableViewCell.identifier)
     }
     
@@ -30,23 +27,17 @@ class FavoriteNewStoreViewController: UIViewController {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
-    
-
-   
 }
+
 extension FavoriteNewStoreViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return viewModel.items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as? TableViewCell else { fatalError() }
         let item = viewModel.items[indexPath.row]
-       
         cell.authorLabel.text = item.title
         cell.descriptionLabel.text = item.descriptionNew
         cell.authorLabel.text = item.author
@@ -54,7 +45,6 @@ extension FavoriteNewStoreViewController: UITableViewDelegate, UITableViewDataSo
         cell.imageViewNews.sd_imageIndicator = SDWebImageActivityIndicator.gray
         cell.imageViewNews?.setImage(url: item.image)
         cell.favoriteButtonOutlet.isHidden = true
-        
         return cell
     }
     
@@ -66,6 +56,4 @@ extension FavoriteNewStoreViewController: UITableViewDelegate, UITableViewDataSo
             }
         }
     }
-    
-    
 }

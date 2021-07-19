@@ -21,7 +21,6 @@ class FilterViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var saveButtonOutlet: UIButton!
     let viewModel = FilterViewModel()
-    let viewModelNews  = NewsViewModel()
 
     weak var delegate: FilterVCDelegate?
 
@@ -60,19 +59,12 @@ class FilterViewController: UIViewController {
         return source
     }()
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        delegate?.didSelect(filter: viewModel.filter)
-    }
-    
     @IBAction func saveFilter(_ sender: UIButton) {
-        delegate?.didSelect(filter: viewModel.filter)
-        delegate?.didSelect(filter: viewModelNews.filter)
-        navigationController?.popViewController(animated: true)
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: {[weak self] in
+            guard let self = self else { return }
+            self.delegate?.didSelect(filter: self.viewModel.filter)
+        })
     }
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,25 +80,29 @@ class FilterViewController: UIViewController {
         self.createToolbars()
         viewModel.getAllSources { [weak self] error in
             if let error = error {
-                //TODO: Show error alert
+                // Show error alert
                 return
             }
             self?.sourcesPickerDataSource.options = self?.viewModel.sourcesNames ?? []
             self?.loadingIndicator.stopAnimating()
-
+            self?.setupInitialData()
             UIView.animate(withDuration: 0.3, animations: {
                 fields.forEach { $0?.alpha = 1 }
             })
         }
-        
         updateSaveButtonState()
-        
     }
     
     @IBAction func segmentedControlAction(_ sender: UISegmentedControl) {
         sourseTF.isHidden = sender.selectedSegmentIndex == 0
         countryTF.isHidden = sender.selectedSegmentIndex == 1
         categoryTF.isHidden = sender.selectedSegmentIndex == 1
+    }
+
+    private func setupInitialData() {
+        countryTF.text = viewModel.filter.countryCode
+        categoryTF.text = viewModel.filter.category
+        sourseTF.text = viewModel.filter.source?.name
     }
 
     func createToolbars() {
@@ -140,8 +136,6 @@ class FilterViewController: UIViewController {
     @IBAction func textChanged(_ sender: UITextField) {
         updateSaveButtonState()
     }
-    
-    
 }
 
 extension FilterViewController: UITextFieldDelegate {
@@ -167,8 +161,5 @@ extension FilterViewController: UITextFieldDelegate {
         picker.delegate = source
         return true
     }
-    
-    
-    
 }
 
