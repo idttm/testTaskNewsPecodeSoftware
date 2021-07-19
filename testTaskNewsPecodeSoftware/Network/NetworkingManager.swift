@@ -145,7 +145,8 @@ class NetworkingManager {
         task.resume()
         return task
     }
-    let apiKey = "5d47805079624a8c9b7bd7843c9e906c"
+//    let apiKey = "5d47805079624a8c9b7bd7843c9e906c"
+    let apiKey = "b04ea92468c94c0498c9bb8d5d26eefa"
     
     func getCountry(page: Int, country: String?, category: String?, sources: String?, completion: @escaping (Result<[Articles],Error>) -> Void) {
         let route = NewsEndPoint.countryAndCategory(country: country, category: category, sources: sources, apiKey: apiKey, page: page)

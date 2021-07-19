@@ -17,29 +17,53 @@ class NewsViewModel {
     var test: News?
     var numberOfRows: Int { data.count }
     private var page = 1
+    var onDataUpdated: () -> Void = {}
+//    var filter = FilterViewModel().filter
     
-    func getDataForCountry(country: String?, refresh: Bool = false,sources: String?, category: String?, completion: @escaping() -> Void) {
+    func refresh (completion: @escaping() -> Void) {
+        self.getDataForCountry(country: filter.countryCode, sources: filter.sourceId, category: filter.category) {
+            completion()
+        }
+    }
+    
+    func getDataForCountry(country: String?, refresh: Bool = false, sources: String?, category: String?, completion: @escaping() -> Void) {
+        
         if refresh == true {
-            data.removeAll()
             page = 1
+            data.removeAll()
         }
         self.networkManager.getCountry(page: page, country: country, category: category, sources: sources) { [weak self] result in
             switch result {
             case .success(let data):
                 self?.data.append(contentsOf: data)
+                self?.onDataUpdated()
             case .failure(let error):
                 break
             }
             self?.increasePage()
             completion()
         }
-        
     }
     
     func increasePage() {
         page += 1
     }
-
+    
+    func getNextPage() {
+        print(self.page)
+        print(filter.countryCode)
+        if filter.category == nil && filter.countryCode == nil && filter.sourceId == nil {
+            getDataForCountry(country: "us", sources: nil, category: "technology") {
+                self.onDataUpdated()
+            }
+        } else {
+            getDataForCountry(country: filter.countryCode, sources: filter.sourceId, category: filter.category) {
+                self.onDataUpdated()
+            }
+        }
+        
+    }
+   
 }
 
 extension UIImageView {

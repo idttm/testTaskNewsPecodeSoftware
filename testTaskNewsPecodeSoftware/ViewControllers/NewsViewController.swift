@@ -22,6 +22,7 @@ class Items {
 class NewsViewController: UIViewController {
     
     let viewModel = NewsViewModel()
+    let fileterModel = FilterViewModel()
     var selectData: Articles!
     var selectedButton: [Items] = []
     let refreshControl = UIRefreshControl()
@@ -39,33 +40,37 @@ class NewsViewController: UIViewController {
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self
-        
+        viewModel.onDataUpdated = { [weak self] in
+            self?.tableView.reloadData()
+        }
         tableView.register(TableViewCell.nib, forCellReuseIdentifier: TableViewCell.identifier)
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-        tableView.addSubview(refreshControl) // not required when using UITableViewController
+        tableView.addSubview(refreshControl)
      
         viewModel.getDataForCountry(country: "us", sources: nil, category: "technology") {
             self.tableView.reloadData()
         }
         
-//        modelView.getDataCategory(category: "business") {
-//            self.tableView.reloadData()
-//        }
-//        modelView.getDataSources(sources: "techcrunch") {
-//            self.tableView.reloadData()
-//        }
-       
-        
     }
-    
     @objc func refresh(_ sender: AnyObject) {
-        viewModel.getDataForCountry(country: "us", refresh: true, sources: nil, category: "technology") {
+        
+        viewModel.refresh {
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
         }
+        
+   
     }
     
+    @IBAction func filterButton(_ sender: UIBarButtonItem) {
+        
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "filter") as? FilterViewController {
+            vc.delegate = self
+            present(vc, animated: true, completion: nil)
+        }
+        
+    }
 }
 
 extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -98,9 +103,7 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if  indexPath.row == viewModel.numberOfRows - 1 {
-            viewModel.getDataForCountry(country: "us", sources: nil, category: "technology") {
-                self.tableView.reloadData()
-            }
+            viewModel.getNextPage()
         }
     }
     
@@ -149,11 +152,10 @@ extension NewsViewController: CustomCellDelegate {
 }
 extension NewsViewController: FilterVCDelegate {
     func didSelect(filter: Filter) {
-        viewModel.getDataForCountry(country: filter.countryCode, sources: filter.sourceId, category: filter.category) {
+        viewModel.getDataForCountry(country: filter.countryCode, refresh: true, sources: filter.sourceId, category: filter.category) {
             self.tableView.reloadData()
         }
     }
-    
 }
 
 

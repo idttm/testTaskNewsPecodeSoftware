@@ -19,7 +19,9 @@ class FilterViewController: UIViewController {
     @IBOutlet weak var categoryTF: UITextField!
     @IBOutlet weak var sourseTF: UITextField!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var saveButtonOutlet: UIButton!
     let viewModel = FilterViewModel()
+    let viewModelNews  = NewsViewModel()
 
     weak var delegate: FilterVCDelegate?
 
@@ -63,17 +65,13 @@ class FilterViewController: UIViewController {
         delegate?.didSelect(filter: viewModel.filter)
     }
     
-    @IBAction func saveButton(_ sender: UIBarButtonItem) {
-        
-//        guard  let secondView = self.storyboard?.instantiateViewController(withIdentifier: "SecondViewController") as? NewsViewController else {
-//              fatalError("View Controller not found")}
-//       secondView.delegate = self //Protocol conformation here
-//
-//
+    @IBAction func saveFilter(_ sender: UIButton) {
         delegate?.didSelect(filter: viewModel.filter)
+        delegate?.didSelect(filter: viewModelNews.filter)
+        navigationController?.popViewController(animated: true)
         dismiss(animated: true, completion: nil)
-        
     }
+    
     
 
     override func viewDidLoad() {
@@ -100,6 +98,9 @@ class FilterViewController: UIViewController {
                 fields.forEach { $0?.alpha = 1 }
             })
         }
+        
+        updateSaveButtonState()
+        
     }
     
     @IBAction func segmentedControlAction(_ sender: UISegmentedControl) {
@@ -128,6 +129,19 @@ class FilterViewController: UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    private func updateSaveButtonState() {
+        let country = countryTF.text ?? ""
+        let category = categoryTF.text ?? ""
+        let sources = sourseTF.text ?? ""
+        saveButtonOutlet.isEnabled = !country.isEmpty || !category.isEmpty || !sources.isEmpty
+    }
+    
+    @IBAction func textChanged(_ sender: UITextField) {
+        updateSaveButtonState()
+    }
+    
+    
 }
 
 extension FilterViewController: UITextFieldDelegate {
@@ -153,5 +167,8 @@ extension FilterViewController: UITextFieldDelegate {
         picker.delegate = source
         return true
     }
+    
+    
+    
 }
 

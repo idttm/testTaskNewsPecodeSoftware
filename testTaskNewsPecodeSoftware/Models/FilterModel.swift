@@ -14,6 +14,7 @@ struct Filter {
 }
 
 class FilterViewModel {
+    
     private var sources: [InfoSource] = []
 
     private let networkManager = NetworkingManager()
