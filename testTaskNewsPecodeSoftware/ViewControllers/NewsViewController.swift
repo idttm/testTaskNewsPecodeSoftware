@@ -21,13 +21,15 @@ class Items {
 
 class NewsViewController: UIViewController {
     
-    let modelView = NewsModelView()
+    let viewModel = NewsViewModel()
     var selectData: Articles!
     var selectedButton: [Items] = []
     let refreshControl = UIRefreshControl()
 
     let realm = try! Realm()
-    var items: Results<DataRealm>!
+    var items: Results<NewsObject>!
+    
+    var delegate: FilterVCDelegate? = nil
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -37,12 +39,13 @@ class NewsViewController: UIViewController {
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self
+        
         tableView.register(TableViewCell.nib, forCellReuseIdentifier: TableViewCell.identifier)
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl) // not required when using UITableViewController
      
-        modelView.getDataCountry(country: "us", category: "technology") {
+        viewModel.getDataForCountry(country: "us", sources: nil, category: "technology") {
             self.tableView.reloadData()
         }
         
@@ -57,17 +60,18 @@ class NewsViewController: UIViewController {
     }
     
     @objc func refresh(_ sender: AnyObject) {
-        modelView.getDataCountry(country: "us", refresh: true, category: "technology") {
+        viewModel.getDataForCountry(country: "us", refresh: true, sources: nil, category: "technology") {
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
         }
     }
+    
 }
 
 extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return modelView.numberOfRows
+        return viewModel.numberOfRows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -75,15 +79,15 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
         ) as! TableViewCell
         selectedButton.append(Items.init(selected: cell.favoriteButtonOutlet.isSelected))
         cell.selectionStyle = .gray
-        cell.titleLabel.text = modelView.data[indexPath.row].title
-        cell.descriptionLabel.text = modelView.data[indexPath.row].description
-        cell.sourseLabel.text = modelView.data[indexPath.row].source?.name
-        cell.authorLabel.text = modelView.data[indexPath.row].author
+        cell.titleLabel.text = viewModel.data[indexPath.row].title
+        cell.descriptionLabel.text = viewModel.data[indexPath.row].description
+        cell.sourseLabel.text = viewModel.data[indexPath.row].source?.name
+        cell.authorLabel.text = viewModel.data[indexPath.row].author
         cell.favoriteButtonOutlet.isSelected = selectedButton[indexPath.row].selected
         
-        if modelView.data[indexPath.row].urlToImage != nil {
+        if viewModel.data[indexPath.row].urlToImage != nil {
             cell.imageViewNews.sd_imageIndicator = SDWebImageActivityIndicator.gray
-            cell.imageViewNews?.setImage(url: modelView.data[indexPath.row].urlToImage!)
+            cell.imageViewNews?.setImage(url: viewModel.data[indexPath.row].urlToImage!)
         }
        
         cell.delegate = self
@@ -93,8 +97,8 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if  indexPath.row == modelView.numberOfRows - 1 {
-            modelView.getDataCountry(country: "us", category: "technology") {
+        if  indexPath.row == viewModel.numberOfRows - 1 {
+            viewModel.getDataForCountry(country: "us", sources: nil, category: "technology") {
                 self.tableView.reloadData()
             }
         }
@@ -102,7 +106,7 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        selectData = modelView.data[indexPath.row]
+        selectData = viewModel.data[indexPath.row]
         performSegue(withIdentifier: "segue", sender: nil)
         
     }
@@ -119,19 +123,22 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension NewsViewController: CustomCellDelegate {
     func customCell(_ cell: TableViewCell, didPressButton: UIButton) {
-        
+
+
         let indexPath = tableView.indexPath(for: cell)
+        
+        let new = viewModel.data[indexPath!.row]
         selectedButton[indexPath!.row].selected.toggle()
-        let favoriteNew = DataRealm()
-        favoriteNew.title = modelView.data[indexPath!.row].title!
-        favoriteNew.descriptionNew = modelView.data[indexPath!.row].description!
-        favoriteNew.author = modelView.data[indexPath!.row].author!
-        favoriteNew.sourse = (modelView.data[indexPath!.row].source?.name)!
-        favoriteNew.image = modelView.data[indexPath!.row].urlToImage!
-        favoriteNew.url = modelView.data[indexPath!.row].url!
+        let object = NewsObject()
+        object.title = viewModel.data[indexPath!.row].title!
+        object.descriptionNew = viewModel.data[indexPath!.row].description!
+        object.author = viewModel.data[indexPath!.row].author!
+        object.sourse = (viewModel.data[indexPath!.row].source?.name)!
+        object.image = viewModel.data[indexPath!.row].urlToImage!
+        object.url = viewModel.data[indexPath!.row].url!
         do {
             try realm.write({
-                realm.add(favoriteNew)
+                realm.add(object)
             })
         } catch let error {
             error.localizedDescription
@@ -140,4 +147,13 @@ extension NewsViewController: CustomCellDelegate {
       
     }
 }
+extension NewsViewController: FilterVCDelegate {
+    func didSelect(filter: Filter) {
+        viewModel.getDataForCountry(country: filter.countryCode, sources: filter.sourceId, category: filter.category) {
+            self.tableView.reloadData()
+        }
+    }
+    
+}
+
 

@@ -16,5 +16,53 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7657CC3B-C816-43EF-9D83-A9A1FBEDD881"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "testTaskNewsPecodeSoftware/ViewControllers/NewsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "didSelect(filter:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7657CC3B-C816-43EF-9D83-A9A1FBEDD881 - 131642ea450eadaf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "testTaskNewsPecodeSoftware.NewsViewController.didSelect(filter: testTaskNewsPecodeSoftware.Filter) -&gt; ()"
+                  moduleName = "testTaskNewsPecodeSoftware"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/andrewcheberyako/Xcode%20/testTaskNewsPecodeSoftware/testTaskNewsPecodeSoftware/ViewControllers/NewsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "151"
+                  endingLineNumber = "151"
+                  offsetFromSymbolStart = "37">
+               </Location>
+               <Location
+                  uuid = "7657CC3B-C816-43EF-9D83-A9A1FBEDD881 - 4f9e380df514f763"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in testTaskNewsPecodeSoftware.NewsViewController.didSelect(filter: testTaskNewsPecodeSoftware.Filter) -&gt; ()"
+                  moduleName = "testTaskNewsPecodeSoftware"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/andrewcheberyako/Xcode%20/testTaskNewsPecodeSoftware/testTaskNewsPecodeSoftware/ViewControllers/NewsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
+                  offsetFromSymbolStart = "52">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

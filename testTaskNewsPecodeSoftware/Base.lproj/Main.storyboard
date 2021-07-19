@@ -33,7 +33,7 @@
                     <navigationItem key="navigationItem" id="Ttk-Ba-aem">
                         <barButtonItem key="rightBarButtonItem" systemItem="bookmarks" id="cX6-JW-aFc">
                             <connections>
-                                <segue destination="6cY-3X-Aqx" kind="presentation" id="qzk-Xw-2S3"/>
+                                <segue destination="RTG-IO-XyD" kind="presentation" id="qzk-Xw-2S3"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -46,7 +46,7 @@
             </objects>
             <point key="canvasLocation" x="2707.2463768115945" y="75"/>
         </scene>
-        <!--Filter View Controller-->
+        <!--Filters-->
         <scene sceneID="oNw-Yg-N5U">
             <objects>
                 <viewController id="6cY-3X-Aqx" customClass="FilterViewController" customModule="testTaskNewsPecodeSoftware" customModuleProvider="target" sceneMemberID="viewController">
@@ -55,7 +55,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="73" translatesAutoresizingMaskIntoConstraints="NO" id="PaC-la-fdd">
-                                <rect key="frame" x="40" y="100" width="334" height="282.5"/>
+                                <rect key="frame" x="40" y="156" width="334" height="282.5"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Country " textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vIJ-VA-2cU">
                                         <rect key="frame" x="0.0" y="0.0" width="334" height="45.5"/>
@@ -75,7 +75,7 @@
                                 </subviews>
                             </stackView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="C2f-UM-zkG">
-                                <rect key="frame" x="20" y="42" width="374" height="32"/>
+                                <rect key="frame" x="20" y="98" width="374" height="32"/>
                                 <segments>
                                     <segment title="First"/>
                                     <segment title="Second"/>
@@ -84,28 +84,41 @@
                                     <action selector="segmentedControlAction:" destination="6cY-3X-Aqx" eventType="valueChanged" id="SwE-FR-wIg"/>
                                 </connections>
                             </segmentedControl>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="6B8-Vg-ufV">
+                                <rect key="frame" x="197" y="411" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Iv9-6Z-560"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="PaC-la-fdd" firstAttribute="leading" secondItem="Iv9-6Z-560" secondAttribute="leading" constant="40" id="9KH-eE-rJ0"/>
+                            <constraint firstItem="6B8-Vg-ufV" firstAttribute="centerX" secondItem="eWs-Mh-0gy" secondAttribute="centerX" id="MUB-P3-IJz"/>
                             <constraint firstItem="C2f-UM-zkG" firstAttribute="leading" secondItem="Iv9-6Z-560" secondAttribute="leading" constant="20" id="NDD-k1-U4o"/>
                             <constraint firstItem="C2f-UM-zkG" firstAttribute="top" secondItem="Iv9-6Z-560" secondAttribute="top" constant="42" id="Quj-gB-YL8"/>
                             <constraint firstItem="PaC-la-fdd" firstAttribute="top" secondItem="Iv9-6Z-560" secondAttribute="top" constant="100" id="bRz-mL-Gp4"/>
                             <constraint firstItem="Iv9-6Z-560" firstAttribute="trailing" secondItem="C2f-UM-zkG" secondAttribute="trailing" constant="20" id="ivN-ZC-F1U"/>
+                            <constraint firstItem="6B8-Vg-ufV" firstAttribute="centerY" secondItem="eWs-Mh-0gy" secondAttribute="centerY" id="rkb-8W-gWH"/>
                             <constraint firstItem="Iv9-6Z-560" firstAttribute="trailing" secondItem="PaC-la-fdd" secondAttribute="trailing" constant="40" id="spI-St-48N"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Filters" id="eBc-ul-0M4">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="PYh-Yo-E7z">
+                            <connections>
+                                <action selector="saveButton:" destination="6cY-3X-Aqx" id="eX4-JX-MDS"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="CategoryTF" destination="Z66-GI-yoq" id="I4j-mQ-sHq"/>
                         <outlet property="CountryTF" destination="vIJ-VA-2cU" id="GPd-40-5xM"/>
                         <outlet property="SourseTF" destination="n3V-TL-bp8" id="1Gx-Pi-0BW"/>
+                        <outlet property="loadingIndicator" destination="6B8-Vg-ufV" id="C4H-am-zSN"/>
                         <outlet property="segmentedControl" destination="C2f-UM-zkG" id="dmV-2D-rgk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wUD-8A-yM6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3576.811594202899" y="-555.13392857142856"/>
+            <point key="canvasLocation" x="4486.9565217391309" y="-555.13392857142856"/>
         </scene>
         <!--Web View Controller-->
         <scene sceneID="pQZ-WI-Vhf">
@@ -196,7 +209,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oHI-Qz-zd8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="665" y="404"/>
+            <point key="canvasLocation" x="958" y="394"/>
         </scene>
         <!--Item-->
         <scene sceneID="n1w-Ea-reP">
@@ -235,6 +248,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rlk-JL-of0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1795.6521739130437" y="736.60714285714278"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="5SY-zO-FIR">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RTG-IO-XyD" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4Vg-cg-iZX">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="6cY-3X-Aqx" kind="relationship" relationship="rootViewController" id="bwP-Qe-0Qr"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mke-IF-OMM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3576.811594202899" y="-555.13392857142856"/>
         </scene>
     </scenes>
     <resources>

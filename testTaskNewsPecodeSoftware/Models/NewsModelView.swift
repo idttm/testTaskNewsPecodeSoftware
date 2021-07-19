@@ -9,55 +9,39 @@
 import UIKit
 import SDWebImage
 
-class NewsModelView {
-    
+class NewsViewModel {
+        
     private let networkManager = NetworkingManager()
-   
+    var filter: Filter = Filter(countryCode: nil, category: nil, sourceId: nil)
     var data: [Articles] = []
     var test: News?
     var numberOfRows: Int { data.count }
     private var page = 1
     
-    
-    func getDataCountry(country: String, refresh: Bool = false, category: String, completio: @escaping() -> Void) {
+    func getDataForCountry(country: String?, refresh: Bool = false,sources: String?, category: String?, completion: @escaping() -> Void) {
         if refresh == true {
             data.removeAll()
             page = 1
         }
-        self.networkManager.getCountry(page: page, country: country, category: category) { [weak self] result in
+        self.networkManager.getCountry(page: page, country: country, category: category, sources: sources) { [weak self] result in
             switch result {
             case .success(let data):
                 self?.data.append(contentsOf: data)
             case .failure(let error):
                 break
             }
-            self?.pagePlus()
-            completio()
+            self?.increasePage()
+            completion()
         }
         
     }
     
-    func pagePlus() {
+    func increasePage() {
         page += 1
-    }
-    
-    func getDataSources(sources: String, completio: @escaping() -> Void) {
-        
-        self.networkManager.getSources(page: page, sources: sources) { [weak self] result in
-            switch result {
-            case .success(let data):
-                self?.data.append(contentsOf: data)
-                print("seccsee")
-            case .failure(let error):
-                break
-            }
-            self?.pagePlus()
-            completio()
-        }
-        
     }
 
 }
+
 extension UIImageView {
     func setImage(url: String) {
         
@@ -66,6 +50,7 @@ extension UIImageView {
         
     }
 }
+
 extension UIColor {
     static func mainWhite() -> UIColor {
         return #colorLiteral(red: 0.968627451, green: 0.9725490196, blue: 0.9921568627, alpha: 1)

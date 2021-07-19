@@ -1,4 +1,3 @@
-
 import Foundation
 
 enum NetworkError: Error {
@@ -31,8 +30,8 @@ enum HTTPTask {
 
 enum NewsEndPoint: EndPointType {
     
-    case countryAndCategory(country: String, category: String, apiKey: String, page: Int)
-    case searchSources(apiKey: String, page: Int, sources: String)
+    case countryAndCategory(country: String?, category: String?, sources: String?,  apiKey: String, page: Int)
+//    case searchSources(apiKey: String, page: Int, sources: String)
     case allSources(apiKey: String)
 }
 
@@ -49,9 +48,7 @@ extension NewsEndPoint {
     
     var path: String {
         switch self {
-        case .countryAndCategory(_, _, _, _):
-            return "top-headlines"
-        case .searchSources(_, _, _):
+        case .countryAndCategory(_, _, _, _, _):
             return "top-headlines"
         case .allSources(_):
             return "top-headlines/sources"
@@ -64,16 +61,21 @@ extension NewsEndPoint {
     
     var task: HTTPTask {
         switch self {
-        case .countryAndCategory( country: let country, category: let category, apiKey: let apiKey, page: let page):
-            return .requestParameters(urlParametrs: ["country": country,
-                                                     "category": category,
-                                                     "apiKey": apiKey,
-                                                     "page": page,
-                                                     ])
-        case .searchSources(apiKey: let apiKey , page: let page, sources: let sources):
-            return .requestParameters(urlParametrs: [ "apiKey": apiKey,
-                                                      "page": page,
-                                                      "sources": sources])
+        case .countryAndCategory(let country, let category, let sources, let apiKey, let page):
+            var params: [String: Any] = [:]
+            if let country = country {
+                params["country"] = country
+            }
+            if let sources = sources {
+                params["sources"] = sources
+            }
+            if let category = category {
+                params["category"] = category
+            }
+            params["apiKey"] = apiKey
+            params["page"] = page
+            return .requestParameters(urlParametrs: params)
+        
         case .allSources(apiKey: let apiKey):
             return .requestParameters(urlParametrs: ["apiKey": apiKey])
         }
@@ -145,8 +147,8 @@ class NetworkingManager {
     }
     let apiKey = "5d47805079624a8c9b7bd7843c9e906c"
     
-    func getCountry(page: Int, country: String, category: String, completion: @escaping (Result<[Articles],Error>) -> Void) {
-        let route = NewsEndPoint.countryAndCategory(country: country, category: category, apiKey: apiKey, page: page)
+    func getCountry(page: Int, country: String?, category: String?, sources: String?, completion: @escaping (Result<[Articles],Error>) -> Void) {
+        let route = NewsEndPoint.countryAndCategory(country: country, category: category, sources: sources, apiKey: apiKey, page: page)
         
         self.fetchData(route, model: News.self) { [weak self] result in
             switch result {
@@ -163,23 +165,8 @@ class NetworkingManager {
         }
     }
     
-    func getSources(page: Int, sources: String, completion: @escaping (Result<[Articles],Error>) -> Void) {
-        let route = NewsEndPoint.searchSources(apiKey: apiKey, page: page, sources: sources)
-        
-        self.fetchData(route, model: News.self) { [weak self] result in
-            switch result {
-            case .success(let model):
-                if page <= model.totalResults! {
-                    completion(.success(model.articles!))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-                return
-            }
-        }
-    }
     
-    func getAllSourse(completion: @escaping (Result<[InfoSource],Error>) -> Void) {
+    func getAllSources(completion: @escaping (Result<[InfoSource],Error>) -> Void) {
     
         let route = NewsEndPoint.allSources(apiKey: apiKey)
         
@@ -203,3 +190,4 @@ class NetworkingManager {
     }
     
 }
+

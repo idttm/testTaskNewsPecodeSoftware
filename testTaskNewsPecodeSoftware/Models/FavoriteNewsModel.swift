@@ -11,9 +11,9 @@ import RealmSwift
 class FavoriteNewsModel {
     
     let realm = try! Realm()
-    var items: Results<DataRealm>!
+    var items: Results<NewsObject>!
     
-    func deleteItem(editingRow: DataRealm, completin: @escaping() -> Void ) {
+    func deleteItem(editingRow: NewsObject, completin: @escaping() -> Void ) {
         do {
             try self.realm.write({
                 self.realm.delete(editingRow)

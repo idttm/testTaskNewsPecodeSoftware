@@ -19,7 +19,7 @@ class FavoriteNewStoreViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
-        viewModel.items = viewModel.realm.objects(DataRealm.self)
+        viewModel.items = viewModel.realm.objects(NewsObject.self)
         tableView.dataSource = self
         tableView.delegate = self
         

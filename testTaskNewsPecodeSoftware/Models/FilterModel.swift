@@ -7,25 +7,53 @@
 
 import Foundation
 
-class FilterModel {
-    
-    let networkManager = NetworkingManager()
-    
-    var data: [InfoSource] = []
-    
-    
-    
-    func getDataAllSources( completion: @escaping() -> Void) {
-        networkManager.getAllSourse { [weak self] result in
+struct Filter {
+    var countryCode: String?
+    var category: String?
+    var sourceId: String?
+}
+
+class FilterViewModel {
+    private var sources: [InfoSource] = []
+
+    private let networkManager = NetworkingManager()
+
+    let countries = ["ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "it", "vjp", "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph"," pl", "pt", "ro", "vrs", "ru", "sa", "se", "sg", "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za"]
+
+    let categories = ["business", "entertainment", "general", "health", "science", "sports", "technology"]
+
+    var sourcesNames: [String] {
+        sources.map { $0.name }
+    }
+
+    private(set) var filter: Filter = Filter(countryCode: nil, category: nil, sourceId: nil)
+
+    func selectCountry(code: String) {
+        filter.sourceId = nil
+        filter.countryCode = code
+    }
+
+    func selectCategory(_ category: String) {
+        filter.sourceId = nil
+        filter.category = category
+    }
+
+    func selectSource(row: Int) {
+        filter.countryCode = nil
+        filter.category = nil
+        filter.sourceId = sources[row].id
+    }
+
+    func getAllSources(completion: @escaping (Error?) -> Void) {
+        networkManager.getAllSources { [weak self] result in
             switch result {
             case .success(let data):
-                self?.data.append(contentsOf: data)
+                self?.sources.append(contentsOf: data)
+                completion(nil)
             case .failure(let error):
                 print(error.localizedDescription)
+                completion(error)
             }
-            completion()
         }
     }
-    
-    
 }

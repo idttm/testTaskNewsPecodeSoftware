@@ -13,7 +13,6 @@ protocol CustomCellDelegate: class {
 
 class TableViewCell: UITableViewCell {
 
-   var model = NewsModelView()
     @IBOutlet weak var imageViewNews: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -34,8 +33,6 @@ class TableViewCell: UITableViewCell {
         
         
     }
-    
-  
     
     @IBAction func favoriteButton(_ sender: UIButton) {
         

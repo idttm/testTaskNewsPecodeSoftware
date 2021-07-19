@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class DataRealm: Object {
+class NewsObject: Object {
     
     @objc dynamic var image: String = ""
     @objc dynamic var title: String = ""
